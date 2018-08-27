@@ -1,13 +1,38 @@
-var path = require('path');
-var filename = path.resolve('src/text.txt');
-console.log(filename);
-
-
+const path = require('path');
+const fetch = require('node-fetch');
 fs = require('fs')
+const Marked = require('marked');
 
-fs.readFile(filename, 'utf8', function (err,data) {
+const getmd = path.resolve('src/README.md');
+fs.readFile(getmd, 'utf8', function (err,data) {
   if (err) {
     return console.log(err);
   }
-  console.log(data);
+
+getLinks(data);
 });
+
+function getLinks(markdown) {
+  const links = [];
+  const renderer = new Marked.Renderer();
+  
+  renderer.link = function(href, title, text) {
+
+    let url=href;
+
+    links.push({
+      href: href,
+      text: text,
+      title: title
+    });
+
+    console.log(url);
+  };
+
+  
+  
+  Marked(markdown, {renderer: renderer});
+  
+  
+  
+};
