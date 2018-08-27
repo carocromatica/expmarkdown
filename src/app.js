@@ -1,5 +1,4 @@
 const path = require('path');
-const fetch = require('node-fetch');
 fs = require('fs')
 
 const getmd = path.resolve('src/README.md');
