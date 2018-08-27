@@ -1,12 +1,19 @@
 const path = require('path');
-fs = require('fs')
+const fetch = require('node-fetch');
 
-const getmd = path.resolve('src/README.md');
-fs.readFile(getmd, 'utf8', function (err,data) {
-  if (err) {
-    return console.log(err);
-  }
-  markdownLinkExtractor(data);
+
+//const fetch = require('node-fetch');
+
+fs = require('fs');
+const ruta= path.resolve('src/README.md');
+
+fs.readFile(ruta, 'utf-8', function (err,data){
+    if(err) throw err;
+    {
+        console.log(err);
+    }
+    markdownLinkExtractor(data);
+    console.log(ruta);
 });
 
 const Marked = require('marked');
@@ -43,6 +50,25 @@ function markdownLinkExtractor(markdown) {
       });
   };
   Marked(markdown, {renderer: renderer});
-
+  validateLink(links)
   console.log(links)
 };
+
+function validateLink(links) {
+  links.forEach(element => {
+    let url = element.href;
+    fetch(url).then(response => response
+    ).then(data => {
+      console.log(data.url);
+      console.log(data.status);
+      console.log(data.statusText); 
+
+      if (data.status=='404'){
+           (console.log('SHAN!')); 
+     
+      }
+    }).catch(error => {
+      console.error('ERROR > ' + error.status);
+    });
+  });
+}
